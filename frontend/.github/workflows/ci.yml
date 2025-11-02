@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write   # ✅ krävs för att pusha till gh-pages
+  contents: write
 
 jobs:
   frontend:
@@ -35,7 +35,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Upload production-ready files
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
@@ -92,14 +92,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download frontend build
+      - name: Download frontend artifact
         uses: actions/download-artifact@v4
         with:
           name: frontend-dist
-          path: dist
+          path: frontend-dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
+          publish_dir: frontend-dist   # ✅ rätt path nu
